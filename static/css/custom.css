@@ -1,0 +1,25 @@
+
+.jumbotron{
+	background-image: url("https://embed.widencdn.net/img/veritas/qqx8wphp3r/1200x630px/spine-cancer-cervical-region.jpeg?u=at8tiu&use=d502n&k=c");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    color: white;
+}
+.navbar {
+	margin-bottom: 0;
+}
+
+body{
+    padding-top: 50px;
+}
+
+body, html {
+    height: 100%;
+}
+
+hr.style1{
+	border-top: 1px solid #8c8b8b;
+}
+
