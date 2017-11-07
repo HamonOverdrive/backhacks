@@ -5,6 +5,7 @@ def connection():
     conn = MySQLdb.connect(host="robautomata.mysql.pythonanywhere-services.com",
                            user = "robautomata",
                            passwd = "niermankind6o",
+                           # cursor class makes cursor return in a dictionary format
                            db = "robautomata$myflaskapp", cursorclass=MySQLdb.cursors.DictCursor)
     c = conn.cursor()
 

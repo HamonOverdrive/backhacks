@@ -98,15 +98,48 @@ def login():
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
-                app.logger.info('PASSWORD MATCHED')
+                # Passed
+                session['logged_in'] = True
+                session['username'] = username
+
+                flash('You are now logged in', 'success')
+                return redirect(url_for('dashboard'))
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error, form=form)
+            # Close connection
+            c.close()
+            conn.close()
+
         else:
             error = 'Username not found'
             return render_template('login.html', error=error, form=form)
 
     return render_template('login.html', form=form)
+
+# Check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
+# Logout
+@app.route('/logout/')
+def logout():
+    session.clear()
+    flash('You are now logged out', 'success')
+    return redirect(url_for('login'))
+
+#if logged in redirects here
+@app.route('/dashboard/')
+@is_logged_in
+def dashboard():
+    return_template('dashboard.html')
 
 
 
