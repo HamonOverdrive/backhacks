@@ -33,8 +33,14 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/login/">Login</a></li>
-          <li><a href="/register/">Register</a></li>
+{#      this if statement shows different links based on if logged in or not#}
+          {% if session.logged_in %}
+              <li><a href="/dashboard/">Dashboard</a></li>
+              <li><a href="/logout/">Logout</a></li>
+          {% else %}
+              <li><a href="/login/">Login</a></li>
+              <li><a href="/register/">Register</a></li>
+          {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
   </div>
