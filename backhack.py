@@ -72,9 +72,38 @@ def register():
         flash('You are now registered and can log in', 'success')
 
         # if using redirect have to use url_for()
-        return redirect(url_for('homepage'))
+        return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
+
+# User Login
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Get Form Fields
+        username = request.form['username']
+        password_candidate = request.form['password']
+
+        # Create cursor
+        c, conn = connection()
+
+        # Get user by username
+        result = c.execute("SELECT * FROM users WHERE username = %s", [username])
+
+        if result > 0:
+            # Get stored hash
+            data = c.fetchone()
+            password = data['password']
+
+            # Compare Passwords
+            if sha256_crypt.verify(password_candidate, password):
+                app.logger.info('PASSWORD MATCHED')
+            else:
+                app.logger.info('PASSWORD NOT MATCHED')
+        else:
+            app.logger.info('NO USER')
+
+    return render_template('login.html')
 
 
 
