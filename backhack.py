@@ -79,6 +79,7 @@ def register():
 # User Login
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    form = RegisterForm(request.form)
     if request.method == 'POST':
         # Get Form Fields
         username = request.form['username']
@@ -103,7 +104,7 @@ def login():
         else:
             app.logger.info('NO USER')
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 
 
