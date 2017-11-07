@@ -67,7 +67,6 @@ def register():
         # Close connection
         c.close()
         conn.close()
-        gc.collect()
 
         # after comma is the category for the flash so you can change type of flash based on that
         flash('You are now registered and can log in', 'success')

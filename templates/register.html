@@ -4,6 +4,7 @@
     {% from "includes/_formhelpers.html" import render_field %}
     <h1>Register</h1>
     <form method="POST" action="">
+    {{form.hidden_tag()}}
     <div class="form-group">
         {{render_field(form.name, class_="form-control")}}
     </div>
