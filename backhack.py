@@ -49,7 +49,32 @@ class RegisterForm(Form):
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        return render_template('register.html')
+        name = form.name.data
+        email = form.email.data
+        username = form.username.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        # create cursor
+        c, conn = connection()
+
+        # Execute query
+        c.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
+                    (name, email, username, password))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        c.close()
+        conn.close()
+        gc.collect()
+
+        # after comma is the category for the flash so you can change type of flash based on that
+        flash('You are now registered and can log in', 'success')
+
+        # if using redirect have to use url_for()
+        return redirect(url_for('homepage'))
+
     return render_template('register.html', form=form)
 
 
