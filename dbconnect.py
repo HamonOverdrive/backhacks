@@ -4,8 +4,7 @@ def connection():
     conn = MySQLdb.connect(host="robautomata.mysql.pythonanywhere-services.com",
                            user = "robautomata",
                            passwd = "niermankind6o",
-                           db = "robautomata$myflaskapp"
-                           )
+                           db = "robautomata$myflaskapp", cursorclass=MySQLdb.cursors.DictCursor)
     c = conn.cursor()
 
     return c, conn
