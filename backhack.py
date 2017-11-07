@@ -139,7 +139,7 @@ def logout():
 @app.route('/dashboard/')
 @is_logged_in
 def dashboard():
-    return_template('dashboard.html')
+    return render_template('dashboard.html')
 
 
 
