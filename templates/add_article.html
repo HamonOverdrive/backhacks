@@ -1,10 +1,11 @@
-{% extends 'layout.html' %}
+{% extends 'header.html' %}
 
 {% block body %}
     <div class="container">
-      <h1>Add Article</h1>
+      <h1>Add Discussion</h1>
       {% from "includes/_formhelpers.html" import render_field %}
       <form method="POST" action="">
+          {{form.hidden_tag()}}
         <div class="form-group">
           {{ render_field(form.title, class_="form-control") }}
         </div>
