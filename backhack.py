@@ -5,7 +5,7 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 
 #pycharms way of using FLask-WTForm
 from flask_wtf import Form
-from wtforms import StringField, BooleanField, validators, PasswordField
+from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -33,6 +33,7 @@ def homepage():
 @app.route('/mission/')
 def missionpage():
     return render_template("mission.html")
+
 
 # Register Form Class
 class RegisterForm(Form):
@@ -130,16 +131,64 @@ def is_logged_in(f):
 
 # Logout
 @app.route('/logout/')
+@is_logged_in
 def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
-#if logged in redirects here
+#if logged in redirects here and is DASHBOARD
 @app.route('/dashboard/')
 @is_logged_in
 def dashboard():
-    return render_template('dashboard.html')
+    # Create cursor
+    c, conn = connection()
+
+    # Get articles
+    result = c.execute("SELECT * FROM articles")
+
+    articles = c.fetchall()
+    if result > 0:
+        return render_template('dashboard.html', articles=articles)
+    else:
+        msg = 'No Articles Found'
+        return render_template('dashboard.html', msg=msg)
+    #Close connection
+    c.close()
+    conn.close()
+
+# Article/Discussion Form Class
+class ArticleForm(Form):
+    title = StringField('Title', [validators.Length(min=1, max=200)])
+    body = TextAreaField('Body', [validators.Length(min=30)])
+
+# Add Article/Discussion
+@app.route('/add_article/', methods=['GET', 'POST'])
+@is_logged_in
+def add_article():
+    form = ArticleForm(request.form)
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        body = form.body.data
+
+        # Create Cursor
+        c, conn = connection()
+
+        # Execute
+        c.execute("INSERT INTO articles(title, body, author) VALUES(%s, %s, %s)", (title, body, session['username']))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        c.close()
+        conn.close()
+
+        flash('Article Created', 'success')
+
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_article.html', form=form)
 
 
 

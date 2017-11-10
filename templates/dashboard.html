@@ -3,5 +3,27 @@
 {% block body %}
     <section>
         <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
+        <a class="btn btn-success" href="/add_article"> Add Discussion</a>
+        <hr>
+        <table class="table table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>ID</th>
+                <th>ID</th>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.author }}</td>
+                        <td>{{ article.create_date }}</td>
+                        <td><a href="edit_article/{{ article.id }}" class="btn btn-default pullright">Edit</a></td>
+                        <td><a href="#" class="btn btn-danger pullright">Edit</a></td>
+                    </tr>
+                {% endfor %}
+            </tr>
+        </table>
     </section>
 {% endblock %}
