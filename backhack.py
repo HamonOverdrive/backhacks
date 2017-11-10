@@ -35,7 +35,7 @@ def missionpage():
     return render_template("mission.html")
 
 @app.route('/discussions/')
-def discussionspage():
+def discussions_page():
     # Create cursor
     c, conn = connection()
 
@@ -52,8 +52,9 @@ def discussionspage():
     c.close()
     conn.close()
 
-@app.route('/discussion/<string:id>/')
-def discussionpage(id):
+# Single discussion link
+@app.route('/discussion/article/<string:id>/')
+def discussion_page(id):
     # Create cursor
     c, conn = connection()
 
