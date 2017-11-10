@@ -1,0 +1,12 @@
+{% extends 'header.html' %}
+
+{% block body %}
+    <div class="container">
+      <h1>Discussions</h1>
+      <ul class="list-group">
+        {% for article in articles %}
+          <li class="list-group-item"><a href="article/{{article.id}}">{{article.title}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+{% endblock %}

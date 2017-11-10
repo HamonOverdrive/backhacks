@@ -34,6 +34,36 @@ def homepage():
 def missionpage():
     return render_template("mission.html")
 
+@app.route('/discussions/')
+def discussionspage():
+    # Create cursor
+    c, conn = connection()
+
+    # Get articles
+    result = c.execute("SELECT * FROM articles")
+
+    articles = c.fetchall()
+    if result > 0:
+        return render_template('discussions.html', articles=articles)
+    else:
+        msg = 'No Articles Found'
+        return render_template('discussions.html', msg=msg)
+    # Close connection
+    c.close()
+    conn.close()
+
+@app.route('/discussion/<string:id>/')
+def discussionpage(id):
+    # Create cursor
+    c, conn = connection()
+
+    # Get articles
+    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+
+    article = c.fetchone()
+
+    return render_template('discussion.html', article=article)
+
 
 # Register Form Class
 class RegisterForm(Form):

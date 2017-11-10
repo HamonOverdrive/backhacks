@@ -2,8 +2,9 @@
 
 {% block body %}
     <section>
+        <div class="container">
         <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
-        <a class="btn btn-success" href="/add_article"> Add Discussion</a>
+        <a class="btn btn-success" href="/add_article/"> Add Discussion</a>
         <hr>
         <table class="table table-striped">
             <tr>
@@ -19,11 +20,12 @@
                         <td>{{ article.title }}</td>
                         <td>{{ article.author }}</td>
                         <td>{{ article.create_date }}</td>
-                        <td><a href="edit_article/{{ article.id }}" class="btn btn-default pullright">Edit</a></td>
-                        <td><a href="#" class="btn btn-danger pullright">Edit</a></td>
+                        <td><a href="edit_article/{{ article.id }}" class="btn btn-default pull-right">Edit</a></td>
+                        <td><a href="#" class="btn btn-danger">Delete</a></td>
                     </tr>
                 {% endfor %}
             </tr>
         </table>
+        </div>
     </section>
 {% endblock %}
