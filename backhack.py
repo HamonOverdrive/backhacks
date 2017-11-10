@@ -52,8 +52,8 @@ def discussions_page():
     c.close()
     conn.close()
 
-# Single discussion link
-@app.route('/discussion/article/<string:id>/')
+# Single discussion link NOT WORKING LINKING TO http://www.backhacks.club/discussions/article/1 instead of http://www.backhacks.club/discussion/1
+@app.route('/discussion/<string:id>/')
 def discussion_page(id):
     # Create cursor
     c, conn = connection()
