@@ -3,13 +3,13 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 # not sure if i need below
 # from flask_mysqldb import MySQL
 
-#pycharms way of using FLask-WTForm
+# pycharms way of using FLask-WTForm
 from flask_wtf import Form
 from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
-#import mysql connection with this
+# import mysql connection with this
 from dbconnect import connection
 
 app = Flask(__name__)
@@ -23,16 +23,19 @@ app = Flask(__name__)
 # # init MYSQL
 # mysql = MySQL(app)
 
-#adding this below made flash work why?
-app.secret_key="clave secreta"
+# adding this below made flash work why?
+app.secret_key = "clave secreta"
+
 
 @app.route('/')
 def homepage():
     return render_template("main.html")
 
+
 @app.route('/mission/')
 def missionpage():
     return render_template("mission.html")
+
 
 @app.route('/discussions/')
 def discussions_page():
@@ -51,6 +54,7 @@ def discussions_page():
     # Close connection
     c.close()
     conn.close()
+
 
 # Single discussion page
 @app.route('/discussion/<string:id>/')
@@ -77,6 +81,7 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField('Confirm Password')
 
+
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -91,7 +96,7 @@ def register():
 
         # Execute query
         c.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
-                    (name, email, username, password))
+                  (name, email, username, password))
 
         # Commit to DB
         conn.commit()
@@ -107,6 +112,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
+
 
 # User Login
 @app.route('/login/', methods=['GET', 'POST'])
@@ -149,6 +155,7 @@ def login():
 
     return render_template('login.html', form=form)
 
+
 # Check if user logged in
 def is_logged_in(f):
     @wraps(f)
@@ -158,7 +165,9 @@ def is_logged_in(f):
         else:
             flash('Unauthorized, Please login', 'danger')
             return redirect(url_for('login'))
+
     return wrap
+
 
 # Logout
 @app.route('/logout/')
@@ -168,7 +177,8 @@ def logout():
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
-#if logged in redirects here and is DASHBOARD
+
+# if logged in redirects here and is DASHBOARD
 @app.route('/dashboard/')
 @is_logged_in
 def dashboard():
@@ -184,14 +194,16 @@ def dashboard():
     else:
         msg = 'No Articles Found'
         return render_template('dashboard.html', msg=msg)
-    #Close connection
+    # Close connection
     c.close()
     conn.close()
+
 
 # Article/Discussion Form Class
 class ArticleForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=200)])
     body = TextAreaField('Body', [validators.Length(min=30)])
+
 
 # Add Article/Discussion
 @app.route('/add_article/', methods=['GET', 'POST'])
@@ -221,8 +233,9 @@ def add_article():
 
     return render_template('add_article.html', form=form)
 
+
 # Edit Article/Discussion
-@app.route('/edit_article/<string:id>', methods=['POST'])
+@app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
     # Create Curosr
@@ -232,6 +245,8 @@ def edit_article(id):
     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     article = c.fetchone()
+    c.close()
+    conn.close()
 
     # Get form
     form = ArticleForm(request.form)
@@ -263,8 +278,9 @@ def edit_article(id):
 
     return render_template('edit_article.html', form=form)
 
+
 # Delete Article/discussion
-@app.route('/delete_article/<string:id>')
+@app.route('/delete_article/<string:id>', method=['POST'])
 @is_logged_in
 def delete_article(id):
     # Create cursor
@@ -283,6 +299,7 @@ def delete_article(id):
     flash('Article Deleted', 'success')
 
     return redirect(url_for('dashboard'))
+
 
 if __name__ == '__main__':
     app.run()
