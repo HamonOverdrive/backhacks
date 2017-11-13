@@ -280,7 +280,7 @@ def edit_article(id):
 
 
 # Delete Article/discussion
-@app.route('/delete_article/<string:id>', method=['POST'])
+@app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
     # Create cursor
