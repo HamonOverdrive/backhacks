@@ -5,6 +5,7 @@
       <h1>Discussions</h1>
       <ul class="list-group">
         {% for article in articles %}
+{# Remember if there is two "/" in routes in href add two "/" to make it link to new route. Else take out the first slash and it will stack ontop the current link#}
           <li class="list-group-item"><a href="/discussion/{{article.id}}">{{article.title}}</a></li>
         {% endfor %}
       </ul>

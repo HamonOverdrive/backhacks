@@ -52,7 +52,7 @@ def discussions_page():
     c.close()
     conn.close()
 
-# Single discussion link NOT WORKING LINKING TO http://www.backhacks.club/discussions/article/1 instead of http://www.backhacks.club/discussion/1
+# Single discussion page
 @app.route('/discussion/<string:id>/')
 def discussion_page(id):
     # Create cursor
@@ -221,7 +221,68 @@ def add_article():
 
     return render_template('add_article.html', form=form)
 
+# Edit Article/Discussion
+@app.route('/edit_article/<string:id>', methods=['POST'])
+@is_logged_in
+def edit_article(id):
+    # Create Curosr
+    c, conn = connection()
 
+    # Get article by id
+    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+
+    article = c.fetchone()
+
+    # Get form
+    form = ArticleForm(request.form)
+
+    # Populate article form fields
+    form.title.data = article['title']
+    form.body.data = article['body']
+
+    if request.method == 'POST' and form.validate():
+        title = request.form['title']
+        body = request.form['body']
+
+        # Create Cursor
+        c, conn = connection()
+
+        # Execute
+        c.execute("UPDATE articles SET title=%s, body=%s WHERE id = %s", (title, body, id))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        c.close()
+        conn.close()
+
+        flash('Article Updated', 'success')
+
+        return redirect(url_for('dashboard'))
+
+    return render_template('edit_article.html', form=form)
+
+# Delete Article/discussion
+@app.route('/delete_article/<string:id>')
+@is_logged_in
+def delete_article(id):
+    # Create cursor
+    c, conn = connection()
+
+    # Execute
+    c.execute("DELETE FROM articles WHERE id=%s", [id])
+
+    # Commit to DB
+    conn.commit()
+
+    # Close connection
+    c.close()
+    conn.close()
+
+    flash('Article Deleted', 'success')
+
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     app.run()
