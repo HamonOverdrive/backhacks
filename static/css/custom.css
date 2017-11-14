@@ -33,6 +33,8 @@ footer{
     color: black;
     background-color: #ffffff;
     text-align: center;
-    max-height: 15px;
+    position: absolute;
+    bottom: 0;
+
 }
 
