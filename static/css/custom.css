@@ -14,7 +14,7 @@ body{
 }
 
 .jumbotron{
-	background-image: url("https://embed.widencdn.net/img/veritas/qqx8wphp3r/1200x630px/spine-cancer-cervical-region.jpeg?u=at8tiu&use=d502n&k=c");
+	background-image: url("http://www.globusmedical.com/wp-content/uploads/2013/04/spine-background.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -33,8 +33,6 @@ footer{
     color: black;
     background-color: #ffffff;
     text-align: center;
-    position: absolute;
-    bottom: 0;
 
 }
 
