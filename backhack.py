@@ -198,6 +198,10 @@ def dashboard():
     c.close()
     conn.close()
 
+# Comments Form Class
+class CommentsForm(Form):
+    comment = StringField('Comment', [validators.Length(min=1)])
+
 
 # Article/Discussion Form Class
 class ArticleForm(Form):
@@ -234,7 +238,7 @@ def add_article():
     return render_template('add_article.html', form=form)
 
 
-# Edit Article/Discussion
+# Edit Article/Discussion remember differs based on user
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
@@ -254,6 +258,13 @@ def edit_article(id):
     # Populate article form fields
     form.title.data = article['title']
     form.body.data = article['body']
+
+    # get author so you can verify only current author can edit post
+    current_author = article['author']
+    if session['username'] == current_author:
+        flash('Article author matches current user', 'success')
+    else:
+        flash('no wrong one')
 
     if request.method == 'POST' and form.validate():
         title = request.form['title']
@@ -279,7 +290,7 @@ def edit_article(id):
     return render_template('edit_article.html', form=form)
 
 
-# Delete Article/discussion
+# Delete Article/discussion different based on user
 @app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
