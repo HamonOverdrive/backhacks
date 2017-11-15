@@ -262,9 +262,10 @@ def edit_article(id):
     # get author so you can verify only current author can edit post
     current_author = article['author']
     if session['username'] == current_author:
-        flash('Article author matches current user', 'success')
+        flash('Article author matches current user you may edit', 'success')
     else:
-        flash('no wrong one')
+        flash('Cannot edit must be appropriate author', 'danger')
+        return redirect(url_for('dashboard'))
 
     if request.method == 'POST' and form.validate():
         title = request.form['title']
