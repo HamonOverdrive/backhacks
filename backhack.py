@@ -259,7 +259,7 @@ def edit_article(id):
     form.title.data = article['title']
     form.body.data = article['body']
 
-    # get author so you can verify only current author can edit post
+    # get author so you can verify only current author can edit post. Remember to include how solved in readme
     current_author = article['author']
     if session['username'] == current_author:
         flash('Article author matches current user you may edit', 'success')
@@ -295,6 +295,27 @@ def edit_article(id):
 @app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
+    # Create Cursor for article
+    c, conn = connection()
+
+    # Get article by id
+    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+
+    article = c.fetchone()
+
+    # close cursors
+    c.close()
+    conn.close()
+
+    # compared currented logged in user to article author to check if you can delete
+    current_author = article['author']
+    if session['username'] == current_author:
+        pass
+    else:
+        flash('Cannot delete must be appropriate author', 'danger')
+        return redirect(url_for('dashboard'))
+    # ends here
+
     # Create cursor
     c, conn = connection()
 
