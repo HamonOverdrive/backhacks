@@ -273,10 +273,9 @@ def edit_article(id):
     c, conn = connection()
 
     # Get article by id
-    article = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
-    # uN COMMENT THIS AFTER TEST IF NOT WORKING
-    # article = c.fetchone()
+    article = c.fetchone()
     c.close()
     conn.close()
 
