@@ -210,10 +210,31 @@ class ArticleForm(Form):
     body = TextAreaField('Body', [validators.Length(min=30)])
 
 # adding comments query
-# @app.route('/add_article/', methods=['POST'])
+# @app.route('/discussion/', methods=['POST'])
 # @is_logged_in
 # def add_comments():
-
+#     form = CommentsForm(request.form)
+#     if request.method == 'POST' and form.validate():
+#         body = form.body.data
+#
+#         # Create Cursor for comments query
+#         c, conn = connection()
+#
+#         # Execute
+#         c.execute("INSERT INTO comments(body, author, article_author) VALUES(%s, %s, %s)", (body, session['username']))
+#
+#         # Commit to DB
+#         conn.commit()
+#
+#         # Close connection
+#         c.close()
+#         conn.close()
+#
+#         flash('Article Created', 'success')
+#
+#         return redirect(url_for('discussions_page'))
+#
+#     return render_template('discussion.html', form=form)
 
 # Add Article/Discussion
 @app.route('/add_article/', methods=['GET', 'POST'])
@@ -248,13 +269,14 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
-    # Create Curosr
+    # Create Cursor
     c, conn = connection()
 
     # Get article by id
-    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+    article = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
-    article = c.fetchone()
+    # uN COMMENT THIS AFTER TEST IF NOT WORKING
+    # article = c.fetchone()
     c.close()
     conn.close()
 

@@ -1,6 +1,6 @@
 {% block body %}
 
-	{% if session['logged_in']%}
+{#	{% if session['logged_in']%}#}
 		<form action="" class="form" method="post" id="replyform">
 			<label for="post">Reply:</label>
 			<textarea class="form-control" rows="4" cols="50" name="reply_content" form="replyform"></textarea> 
@@ -9,8 +9,8 @@
 			<br>
 			<br>
 		</form>
-	{% else %}
-	<p>You must be <a href="/login/">logged in</a> to post!</p>
-	{% endif %}
+{#	{% else %}#}
+{#	<p>You must be <a href="/login/">logged in</a> to post!</p>#}
+{#	{% endif %}#}
 
 {% endblock %}
