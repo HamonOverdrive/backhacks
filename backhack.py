@@ -198,6 +198,7 @@ def dashboard():
     c.close()
     conn.close()
 
+
 # Comments Form Class
 class CommentsForm(Form):
     comment = StringField('Comment', [validators.Length(min=1)])
@@ -207,6 +208,11 @@ class CommentsForm(Form):
 class ArticleForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=200)])
     body = TextAreaField('Body', [validators.Length(min=30)])
+
+# adding comments query
+# @app.route('/add_article/', methods=['POST'])
+# @is_logged_in
+# def add_comments():
 
 
 # Add Article/Discussion
@@ -301,6 +307,7 @@ def delete_article(id):
     # Get article by id
     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
+    # represents an object in the articles table
     article = c.fetchone()
 
     # close cursors
