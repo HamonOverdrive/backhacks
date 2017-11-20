@@ -183,45 +183,6 @@ def dashboard():
     c.close()
     conn.close()
 
-# adding comments query
-# @app.route('/discussion/', methods=['POST'])
-# @is_logged_in
-# def add_comments():
-#     form = CommentsForm(request.form)
-#     # Create Cursor for article
-#     c, conn = connection()
-#     # Get article by id
-#     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
-#     # represents an object in the articles table
-#     article = c.fetchone()
-#     # close cursors
-#     c.close()
-#     conn.close()
-#     # article author is need so you can put inside comment table
-#     current_author = article['author']
-#
-#     if request.method == 'POST' and form.validate():
-#         body = form.body.data
-#
-#         # Create Cursor for comments query
-#         c, conn = connection()
-#
-#         # Execute
-#         c.execute("INSERT INTO comments(body, author, article_author) VALUES(%s, %s, %s)", (body, session['username'], current_author))
-#
-#         # Commit to DB
-#         conn.commit()
-#
-#         # Close connection
-#         c.close()
-#         conn.close()
-#
-#         flash('Comment Created', 'success')
-#
-#         return redirect(url_for('discussions_page'))
-#
-#     return render_template('discussion.html', form=form)
-
 # Add Article/Discussion
 @app.route('/add_article/', methods=['GET', 'POST'])
 @is_logged_in
@@ -362,13 +323,13 @@ def add_comments(id):
     current_title = article['title']
 
     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    comment = form.comment.data
+    new_comment = form.comment.data
 
     # Create Cursor
     c, conn = connection()
 
     # Execute query
-    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, comment, session['username']))
+    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, new_comment, session['username']))
 
     # Commit to DB
     conn.commit()
