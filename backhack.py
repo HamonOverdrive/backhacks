@@ -54,7 +54,7 @@ def discussions_page():
 # Single discussion page
 @app.route('/discussion/<string:id>/')
 def discussion_page(id):
-    form = CommentsForm
+    form = CommentsForm(request.form)
     # Create cursor
     c, conn = connection()
 
