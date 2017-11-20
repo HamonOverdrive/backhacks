@@ -54,6 +54,7 @@ def discussions_page():
 # Single discussion page
 @app.route('/discussion/<string:id>/')
 def discussion_page(id):
+    form = CommentsForm
     # Create cursor
     c, conn = connection()
 
@@ -68,7 +69,7 @@ def discussion_page(id):
 
     # GET HISTORY
 
-    return render_template('discussion.html', article=article)
+    return render_template('discussion.html', article=article, form=form)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
