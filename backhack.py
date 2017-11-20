@@ -8,7 +8,7 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 # from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 from passlib.hash import sha256_crypt
 from functools import wraps
-from .forms import RegisterForm, CommentsForm, ArticleForm
+from forms import RegisterForm, CommentsForm, ArticleForm
 
 # import mysql connection with this
 from dbconnect import connection
