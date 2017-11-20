@@ -4,10 +4,11 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 # from flask_mysqldb import MySQL
 
 # pycharms way of using FLask-WTForm
-from flask_wtf import Form
-from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
+# from flask_wtf import Form
+# from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 from passlib.hash import sha256_crypt
 from functools import wraps
+from .forms import RegisterForm, CommentsForm, ArticleForm
 
 # import mysql connection with this
 from dbconnect import connection
@@ -57,7 +58,7 @@ def discussions_page():
 
 
 # Single discussion page
-@app.route('/discussion/<string:id>/')
+@app.route('//discussion/<string:id>/', methods=['GET', 'POST'])
 def discussion_page(id):
     # Create cursor
     c, conn = connection()
@@ -70,16 +71,16 @@ def discussion_page(id):
     return render_template('discussion.html', article=article)
 
 
-# Register Form Class
-class RegisterForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=50)])
-    username = StringField('Username', [validators.Length(min=4, max=25)])
-    email = StringField('Email', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
-    ])
-    confirm = PasswordField('Confirm Password')
+# # Register Form Class
+# class RegisterForm(Form):
+#     name = StringField('Name', [validators.Length(min=1, max=50)])
+#     username = StringField('Username', [validators.Length(min=4, max=25)])
+#     email = StringField('Email', [validators.Length(min=6, max=50)])
+#     password = PasswordField('Password', [
+#         validators.DataRequired(),
+#         validators.EqualTo('confirm', message='Passwords do not match')
+#     ])
+#     confirm = PasswordField('Confirm Password')
 
 
 @app.route('/register/', methods=['GET', 'POST'])
@@ -199,21 +200,33 @@ def dashboard():
     conn.close()
 
 
-# Comments Form Class
-class CommentsForm(Form):
-    comment = StringField('Comment', [validators.Length(min=1)])
-
-
-# Article/Discussion Form Class
-class ArticleForm(Form):
-    title = StringField('Title', [validators.Length(min=1, max=200)])
-    body = TextAreaField('Body', [validators.Length(min=30)])
+# # Comments Form Class
+# class CommentsForm(Form):
+#     comment = StringField('Comment', [validators.Length(min=1)])
+#
+#
+# # Article/Discussion Form Class
+# class ArticleForm(Form):
+#     title = StringField('Title', [validators.Length(min=1, max=200)])
+#     body = TextAreaField('Body', [validators.Length(min=30)])
 
 # adding comments query
 # @app.route('/discussion/', methods=['POST'])
 # @is_logged_in
 # def add_comments():
 #     form = CommentsForm(request.form)
+#     # Create Cursor for article
+#     c, conn = connection()
+#     # Get article by id
+#     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+#     # represents an object in the articles table
+#     article = c.fetchone()
+#     # close cursors
+#     c.close()
+#     conn.close()
+#     # article author is need so you can put inside comment table
+#     current_author = article['author']
+#
 #     if request.method == 'POST' and form.validate():
 #         body = form.body.data
 #
@@ -221,7 +234,7 @@ class ArticleForm(Form):
 #         c, conn = connection()
 #
 #         # Execute
-#         c.execute("INSERT INTO comments(body, author, article_author) VALUES(%s, %s, %s)", (body, session['username']))
+#         c.execute("INSERT INTO comments(body, author, article_author) VALUES(%s, %s, %s)", (body, session['username'], current_author))
 #
 #         # Commit to DB
 #         conn.commit()
@@ -230,7 +243,7 @@ class ArticleForm(Form):
 #         c.close()
 #         conn.close()
 #
-#         flash('Article Created', 'success')
+#         flash('Comment Created', 'success')
 #
 #         return redirect(url_for('discussions_page'))
 #
