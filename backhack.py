@@ -70,43 +70,6 @@ def discussion_page(id):
 
     return render_template('discussion.html', article=article)
 
-@app.route('/add_comments/<string:id>/', methods=['POST'])
-@is_logged_in
-def add_comments(id):
-    form = CommentsForm(request.form)
-    # Create cursor TO GET ARTICLE TITLE TO JOIN LATER
-    c, conn = connection()
-    # Get article by id
-    c.execute("SELECT * FROM articles WHERE id = %s", [id])
-    # represents an object in the articles table
-    article = c.fetchone()
-    # close cursors
-    c.close()
-    conn.close()
-    # article title is need so you can put inside comment table
-    current_title = article['title']
-
-    # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    body = form.body.data
-
-    # Create Cursor
-    c, conn = connection()
-
-    # Execute query
-    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, body, session['username']))
-
-    # Commit to DB
-    conn.commit()
-
-    # Close connection
-    c.close()
-    conn.close()
-
-    flash('Comment added!', 'success')
-
-    return redirect(url_for('dashboard'))
-
-
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -378,6 +341,42 @@ def delete_article(id):
     conn.close()
 
     flash('Article Deleted', 'success')
+
+    return redirect(url_for('dashboard'))
+
+@app.route('/add_comments/<string:id>/', methods=['POST'])
+@is_logged_in
+def add_comments(id):
+    form = CommentsForm(request.form)
+    # Create cursor TO GET ARTICLE TITLE TO JOIN LATER
+    c, conn = connection()
+    # Get article by id
+    c.execute("SELECT * FROM articles WHERE id = %s", [id])
+    # represents an object in the articles table
+    article = c.fetchone()
+    # close cursors
+    c.close()
+    conn.close()
+    # article title is need so you can put inside comment table
+    current_title = article['title']
+
+    # get form body data as this is post method and create cursor dont need if post as this is post already at the top
+    body = form.body.data
+
+    # Create Cursor
+    c, conn = connection()
+
+    # Execute query
+    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, body, session['username']))
+
+    # Commit to DB
+    conn.commit()
+
+    # Close connection
+    c.close()
+    conn.close()
+
+    flash('Comment added!', 'success')
 
     return redirect(url_for('dashboard'))
 
