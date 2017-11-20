@@ -362,13 +362,13 @@ def add_comments(id):
     current_title = article['title']
 
     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    body = form.body.data
+    comment = form.comment.data
 
     # Create Cursor
     c, conn = connection()
 
     # Execute query
-    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, body, session['username']))
+    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, comment, session['username']))
 
     # Commit to DB
     conn.commit()
