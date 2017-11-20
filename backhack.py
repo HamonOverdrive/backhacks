@@ -55,7 +55,7 @@ def discussions_page():
 @app.route('/discussion/<string:id>/')
 def discussion_page(id):
     #POSSIBLE BUG HERE
-    form = CommentsForm(request.form)
+    # form = CommentsForm(request.form)
     # Create cursor
     c, conn = connection()
 
@@ -70,7 +70,7 @@ def discussion_page(id):
 
     # GET HISTORY
 
-    return render_template('discussion.html', article=article, form=form)
+    return render_template('discussion.html', article=article)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -326,7 +326,7 @@ def add_comments(id):
 
     # possible bug HERE
     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    new_comment = request.form['comment']
+    new_comment = form.comment.data
 
     # Create Cursor
     c, conn = connection()
