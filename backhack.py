@@ -54,6 +54,7 @@ def discussions_page():
 # Single discussion page
 @app.route('/discussion/<string:id>/')
 def discussion_page(id):
+    #POSSIBLE BUG HERE
     form = CommentsForm(request.form)
     # Create cursor
     c, conn = connection()
@@ -306,6 +307,7 @@ def delete_article(id):
 
     return redirect(url_for('dashboard'))
 
+#adding COMMENTS NOT WORKING AS THE COMMENT MATERIAL NOT GOING INSIDE SQL TABLE
 @app.route('/add_comments/<string:id>/', methods=['POST'])
 @is_logged_in
 def add_comments(id):
@@ -322,8 +324,9 @@ def add_comments(id):
     # article title is need so you can put inside comment table
     current_title = article['title']
 
+    # possible bug HERE
     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    new_comment = form.comment.data
+    new_comment = request.form['comment']
 
     # Create Cursor
     c, conn = connection()
