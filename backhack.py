@@ -3,9 +3,6 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 # not sure if i need below
 # from flask_mysqldb import MySQL
 
-# pycharms way of using FLask-WTForm
-# from flask_wtf import Form
-# from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 from passlib.hash import sha256_crypt
 from functools import wraps
 from forms import RegisterForm, CommentsForm, ArticleForm
@@ -32,11 +29,9 @@ app.secret_key = "clave secreta"
 def homepage():
     return render_template("main.html")
 
-
 @app.route('/mission/')
 def missionpage():
     return render_template("mission.html")
-
 
 @app.route('/discussions/')
 def discussions_page():
@@ -56,32 +51,22 @@ def discussions_page():
     c.close()
     conn.close()
 
-
 # Single discussion page
-@app.route('//discussion/<string:id>/', methods=['GET', 'POST'])
+@app.route('/discussion/<string:id>/')
 def discussion_page(id):
     # Create cursor
     c, conn = connection()
 
-    # Get articles
+    # Get articles with corresponding comments by using JOIN
     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     article = c.fetchone()
 
+    # Close connection
+    c.close()
+    conn.close()
+
     return render_template('discussion.html', article=article)
-
-
-# # Register Form Class
-# class RegisterForm(Form):
-#     name = StringField('Name', [validators.Length(min=1, max=50)])
-#     username = StringField('Username', [validators.Length(min=4, max=25)])
-#     email = StringField('Email', [validators.Length(min=6, max=50)])
-#     password = PasswordField('Password', [
-#         validators.DataRequired(),
-#         validators.EqualTo('confirm', message='Passwords do not match')
-#     ])
-#     confirm = PasswordField('Confirm Password')
-
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -113,7 +98,6 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
-
 
 # User Login
 @app.route('/login/', methods=['GET', 'POST'])
@@ -156,7 +140,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-
 # Check if user logged in
 def is_logged_in(f):
     @wraps(f)
@@ -169,7 +152,6 @@ def is_logged_in(f):
 
     return wrap
 
-
 # Logout
 @app.route('/logout/')
 @is_logged_in
@@ -177,7 +159,6 @@ def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
-
 
 # if logged in redirects here and is DASHBOARD
 @app.route('/dashboard/')
@@ -198,17 +179,6 @@ def dashboard():
     # Close connection
     c.close()
     conn.close()
-
-
-# # Comments Form Class
-# class CommentsForm(Form):
-#     comment = StringField('Comment', [validators.Length(min=1)])
-#
-#
-# # Article/Discussion Form Class
-# class ArticleForm(Form):
-#     title = StringField('Title', [validators.Length(min=1, max=200)])
-#     body = TextAreaField('Body', [validators.Length(min=30)])
 
 # adding comments query
 # @app.route('/discussion/', methods=['POST'])
@@ -277,7 +247,6 @@ def add_article():
 
     return render_template('add_article.html', form=form)
 
-
 # Edit Article/Discussion remember differs based on user
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
@@ -329,7 +298,6 @@ def edit_article(id):
         return redirect(url_for('dashboard'))
 
     return render_template('edit_article.html', form=form)
-
 
 # Delete Article/discussion different based on user
 @app.route('/delete_article/<string:id>', methods=['POST'])

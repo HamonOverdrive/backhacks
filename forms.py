@@ -1,3 +1,6 @@
+# separate forms file to import
+
+# pycharms way of using FLask-WTForm
 from flask_wtf import Form
 from wtforms import StringField, BooleanField, validators, PasswordField, TextAreaField
 
@@ -16,7 +19,7 @@ class RegisterForm(Form):
 
 # Comments Form Class
 class CommentsForm(Form):
-    comment = StringField('Comment', [validators.Length(min=1)])
+    comment = StringField('Comment', [validators.Length(min=0)])
 
 
 # Article/Discussion Form Class
