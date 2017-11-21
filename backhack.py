@@ -248,8 +248,6 @@ def edit_article(id):
     result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     article = c.fetchone()
-    c.close()
-    conn.close()
 
     # Get form
     form = ArticleForm(request.form)
@@ -269,9 +267,6 @@ def edit_article(id):
     if request.method == 'POST' and form.validate():
         title = request.form['title']
         body = request.form['body']
-
-        # Create Cursor
-        c, conn = connection()
 
         # Execute
         c.execute("UPDATE articles SET title=%s, body=%s WHERE id = %s", (title, body, id))
