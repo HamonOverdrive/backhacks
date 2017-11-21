@@ -4,7 +4,10 @@
 		<form action="{{ url_for('discussion_page', id=article.id) }}" class="form" method="post" id="replyform">
             {{form.hidden_tag()}}
 			<label for="post">Reply:</label>
-			<textarea class="form-control" rows="4" cols="50" name="reply_content" form="replyform"></textarea>
+{#			<textarea class="form-control" rows="4" cols="50" name="reply_content" form="replyform" value="{{ request.form.comment }}"></textarea>#}
+            <div class="form-group">
+                {{ render_field(form.comment, class_="form-control") }}
+            </div>
 			<br>
 			<input class="btn btn-primary" type="submit" value="submit">
 			<br>
