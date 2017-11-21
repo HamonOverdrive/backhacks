@@ -1,10 +1,10 @@
 {% block body %}
 
 {#	{% if session['logged_in']%}#}
-		<form action="{{ url_for('discussion_page', id=article.id) }}" class="form" method="post" id="replyform">
+		<form action="" method="POST">
             {{form.hidden_tag()}}
 			<label for="post">Reply:</label>
-			<textarea class="form-control" rows="4" cols="50" name="reply_content" form="replyform"></textarea>
+			<textarea class="form-control" rows="4" cols="50"></textarea>
 			<br>
 			<input class="btn btn-primary" type="submit" value="submit">
 			<br>
