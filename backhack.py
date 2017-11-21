@@ -52,7 +52,7 @@ def discussions_page():
     conn.close()
 
 # Single discussion page
-@app.route('/discussion/<string:id>/')
+@app.route('/discussion/<string:id>/', methods=['GET', 'POST'])
 def discussion_page(id):
     #POSSIBLE BUG HERE
     form = CommentsForm(request.form)
@@ -67,6 +67,30 @@ def discussion_page(id):
     # Close connection
     c.close()
     conn.close()
+
+    # article title is need so you can put inside comment table
+    current_title = article['title']
+
+    if request.method == 'POST' and form.validate():
+        # get form body data as this is post method and create cursor dont need if post as this is post already at the top
+        new_comment = form.comment.data
+
+        # Create Cursor
+        c, conn = connection()
+
+        # Execute query
+        c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)",
+                  (current_title, new_comment, session['username']))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        c.close()
+        conn.close()
+
+        flash('Comment added!', 'success')
+        return redirect(url_for('dashboard'))
 
     # GET HISTORY
 
@@ -307,43 +331,43 @@ def delete_article(id):
 
     return redirect(url_for('dashboard'))
 
-#adding COMMENTS NOT WORKING AS THE COMMENT MATERIAL NOT GOING INSIDE SQL TABLE
-@app.route('/add_comments/<string:id>/', methods=['POST'])
-@is_logged_in
-def add_comments(id):
-    form = CommentsForm(request.form)
-    # Create cursor TO GET ARTICLE TITLE TO JOIN LATER
-    c, conn = connection()
-    # Get article by id
-    c.execute("SELECT * FROM articles WHERE id = %s", [id])
-    # represents an object in the articles table
-    article = c.fetchone()
-    # close cursors
-    c.close()
-    conn.close()
-    # article title is need so you can put inside comment table
-    current_title = article['title']
-
-    # possible bug HERE
-    # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-    new_comment = form.comment.data
-
-    # Create Cursor
-    c, conn = connection()
-
-    # Execute query
-    c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, new_comment, session['username']))
-
-    # Commit to DB
-    conn.commit()
-
-    # Close connection
-    c.close()
-    conn.close()
-
-    flash('Comment added!', 'success')
-
-    return redirect(url_for('dashboard'))
+# #adding COMMENTS NOT WORKING AS THE COMMENT MATERIAL NOT GOING INSIDE SQL TABLE
+# @app.route('/add_comments/<string:id>/', methods=['POST'])
+# @is_logged_in
+# def add_comments(id):
+#     form = CommentsForm(request.form)
+#     # Create cursor TO GET ARTICLE TITLE TO JOIN LATER
+#     c, conn = connection()
+#     # Get article by id
+#     c.execute("SELECT * FROM articles WHERE id = %s", [id])
+#     # represents an object in the articles table
+#     article = c.fetchone()
+#     # close cursors
+#     c.close()
+#     conn.close()
+#     # article title is need so you can put inside comment table
+#     current_title = article['title']
+#
+#     # possible bug HERE
+#     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
+#     new_comment = form.comment.data
+#
+#     # Create Cursor
+#     c, conn = connection()
+#
+#     # Execute query
+#     c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, new_comment, session['username']))
+#
+#     # Commit to DB
+#     conn.commit()
+#
+#     # Close connection
+#     c.close()
+#     conn.close()
+#
+#     flash('Comment added!', 'success')
+#
+#     return redirect(url_for('dashboard'))
 
 
 if __name__ == '__main__':
