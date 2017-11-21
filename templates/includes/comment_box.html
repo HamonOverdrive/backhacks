@@ -1,6 +1,7 @@
 {% block body %}
 
 {#	{% if session['logged_in']%}#}
+        {% from "includes/_formhelpers.html" import render_field %}
 		<form action="{{ url_for('discussion_page', id=article.id) }}" class="form" method="post" id="replyform">
             {{form.hidden_tag()}}
 			<label for="post">Reply:</label>
