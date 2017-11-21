@@ -19,7 +19,7 @@ class RegisterForm(Form):
 
 # Comments Form Class
 class CommentsForm(Form):
-    comment = StringField('Comment', [validators.Length(min=0)])
+    comment = StringField('Comment', [validators.Length(min=0, max=255), validators.DataRequired()])
 
 
 # Article/Discussion Form Class
