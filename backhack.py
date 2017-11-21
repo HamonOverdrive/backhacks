@@ -73,6 +73,7 @@ def discussion_page(id):
 
     if request.method == 'POST' and form.validate():
         # get form body data as this is post method and create cursor dont need if post as this is post already at the top
+        # THIS IS RETURNING AN EMPTY STRING WHY
         new_comment = form.comment.data
 
         # Create Cursor
@@ -301,10 +302,6 @@ def delete_article(id):
     # represents an object in the articles table
     article = c.fetchone()
 
-    # close cursors
-    c.close()
-    conn.close()
-
     # compared currented logged in user to article author to check if you can delete
     current_author = article['author']
     if session['username'] == current_author:
@@ -314,10 +311,7 @@ def delete_article(id):
         return redirect(url_for('dashboard'))
     # ends here
 
-    # Create cursor
-    c, conn = connection()
-
-    # Execute
+    # Execute second delete query
     c.execute("DELETE FROM articles WHERE id=%s", [id])
 
     # Commit to DB
