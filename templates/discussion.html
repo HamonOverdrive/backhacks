@@ -17,7 +17,9 @@
 
         <ul class="list-group">
             {% for comment in comments %}
-                <li class="list-group-item">{{ comment.comment }} posted by <strong>{{ comment.author }}</strong> on <strong>{{ comment.comment_date }}</strong></li>
+                <li class="list-group-item">{{ comment.comment }} posted by <strong>{{ comment.author }}</strong> on <strong>{{ comment.comment_date }}</strong>
+                <a href="/edit_article/{{ article.id }}" class="btn btn-default pull-right">Edit</a>
+                </li>
             {% endfor %}
         </ul>
     </div>
