@@ -67,9 +67,11 @@ def discussion_page(id):
 
     # article title is need so you can put inside comment table
     current_title = article['title']
+    # article id will ge the unique id of the article just in case if articles have same name
+    current_id = article['id']
 
     # Fetch all comments for html page
-    c.execute("SELECT * FROM comments WHERE article_title=%s AND id=%s", [current_title, id])
+    c.execute("SELECT * FROM comments WHERE article_title=%s", [current_title])
 
     # fetch all into variable for later use
     comments = c.fetchall()
@@ -83,8 +85,8 @@ def discussion_page(id):
         c, conn = connection()
 
         # Execute query
-        c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)",
-                  (current_title, new_comment, session['username']))
+        c.execute("INSERT INTO comments(article_title, comment, author, common_id) VALUES(%s, %s, %s, %s)",
+                  (current_title, new_comment, session['username'], current_id))
 
         # Commit to DB
         conn.commit()
