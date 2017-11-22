@@ -60,16 +60,18 @@ def discussion_page(id):
     c, conn = connection()
 
     # Get articles with corresponding comments by using JOIN
-    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+    c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     article = c.fetchone()
 
-    # Close connection
-    c.close()
-    conn.close()
-
     # article title is need so you can put inside comment table
     current_title = article['title']
+
+    # Fetch all comments for html page
+    c.execute("SELECT * FROM comments WHERE article_title=%s", [current_title])
+
+    # fetch all into variable for later use
+    comments = c.fetchall()
 
     if request.method == 'POST' and form.validate():
         # get form body data as this is post method and create cursor dont need if post as this is post already at the top
@@ -91,11 +93,11 @@ def discussion_page(id):
         conn.close()
 
         flash('Comment added!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('discussions_page'))
 
-    # GET HISTORY
+    # GET HISTORY by joining
 
-    return render_template('discussion.html', article=article, form=form)
+    return render_template('discussion.html', article=article, form=form, comments=comments)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -292,7 +294,7 @@ def delete_article(id):
     c, conn = connection()
 
     # Get article by id
-    result = c.execute("SELECT * FROM articles WHERE id = %s", [id])
+    c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     # represents an object in the articles table
     article = c.fetchone()
