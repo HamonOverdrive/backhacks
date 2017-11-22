@@ -71,7 +71,7 @@ def discussion_page(id):
     current_id = article['id']
 
     # Fetch all comments for html page
-    c.execute("SELECT * FROM comments WHERE article_title=%s", [current_title])
+    c.execute("SELECT * FROM comments WHERE article_title=%s AND common_id=%s", [current_title, current_id])
 
     # fetch all into variable for later use
     comments = c.fetchall()
