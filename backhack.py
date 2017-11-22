@@ -52,6 +52,7 @@ def discussions_page():
     conn.close()
 
 # Single discussion page
+# things that i need to fix MAKE sure the comments is also checking ID of article as some have same name
 @app.route('/discussion/<string:id>/', methods=['GET', 'POST'])
 def discussion_page(id):
     #POSSIBLE BUG HERE
@@ -68,7 +69,7 @@ def discussion_page(id):
     current_title = article['title']
 
     # Fetch all comments for html page
-    c.execute("SELECT * FROM comments WHERE article_title=%s", [current_title])
+    c.execute("SELECT * FROM comments WHERE article_title=%s AND id=%s", [current_title, id])
 
     # fetch all into variable for later use
     comments = c.fetchall()
@@ -287,6 +288,7 @@ def edit_article(id):
     return render_template('edit_article.html', form=form)
 
 # Delete Article/discussion different based on user
+# ALSO NEED TO IMPLEMENT DELTION OF COMMENTS IN THIS ARTICLE ALSO
 @app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
@@ -321,45 +323,6 @@ def delete_article(id):
     flash('Article Deleted', 'success')
 
     return redirect(url_for('dashboard'))
-
-# #adding COMMENTS NOT WORKING AS THE COMMENT MATERIAL NOT GOING INSIDE SQL TABLE
-# @app.route('/add_comments/<string:id>/', methods=['POST'])
-# @is_logged_in
-# def add_comments(id):
-#     form = CommentsForm(request.form)
-#     # Create cursor TO GET ARTICLE TITLE TO JOIN LATER
-#     c, conn = connection()
-#     # Get article by id
-#     c.execute("SELECT * FROM articles WHERE id = %s", [id])
-#     # represents an object in the articles table
-#     article = c.fetchone()
-#     # close cursors
-#     c.close()
-#     conn.close()
-#     # article title is need so you can put inside comment table
-#     current_title = article['title']
-#
-#     # possible bug HERE
-#     # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-#     new_comment = form.comment.data
-#
-#     # Create Cursor
-#     c, conn = connection()
-#
-#     # Execute query
-#     c.execute("INSERT INTO comments(article_title, comment, author) VALUES(%s, %s, %s)", (current_title, new_comment, session['username']))
-#
-#     # Commit to DB
-#     conn.commit()
-#
-#     # Close connection
-#     c.close()
-#     conn.close()
-#
-#     flash('Comment added!', 'success')
-#
-#     return redirect(url_for('dashboard'))
-
 
 if __name__ == '__main__':
     app.run()
