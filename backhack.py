@@ -52,7 +52,6 @@ def discussions_page():
     conn.close()
 
 # Single discussion page
-# things that i need to fix MAKE sure the comments is also checking ID of article as some have same name
 @app.route('/discussion/<string:id>/', methods=['GET', 'POST'])
 def discussion_page(id):
     #POSSIBLE BUG HERE
@@ -60,14 +59,14 @@ def discussion_page(id):
     # Create cursor
     c, conn = connection()
 
-    # Get articles with corresponding comments by using JOIN
+    # select current article page that was clicked
     c.execute("SELECT * FROM articles WHERE id = %s", [id])
 
     article = c.fetchone()
 
     # article title is need so you can put inside comment table
     current_title = article['title']
-    # article id will ge the unique id of the article just in case if articles have same name
+    # article id will be the unique id of the article just in case if articles have same name also to be queried if post
     current_id = article['id']
 
     # Fetch all comments for html page
@@ -78,7 +77,7 @@ def discussion_page(id):
 
     if request.method == 'POST' and form.validate():
         # get form body data as this is post method and create cursor dont need if post as this is post already at the top
-        # THIS IS RETURNING AN EMPTY STRING WHY
+        # THIS IS RETURNING AN EMPTY STRING WHY~~~~ answer: compare login html input and discussion html render field
         new_comment = form.comment.data
 
         # Create Cursor
@@ -97,8 +96,6 @@ def discussion_page(id):
 
         flash('Comment added!', 'success')
         return redirect(url_for('discussions_page'))
-
-    # GET HISTORY by joining
 
     return render_template('discussion.html', article=article, form=form, comments=comments)
 
@@ -290,7 +287,7 @@ def edit_article(id):
     return render_template('edit_article.html', form=form)
 
 # Delete Article/discussion different based on user
-# ALSO NEED TO IMPLEMENT DELTION OF COMMENTS IN THIS ARTICLE ALSO
+# ALSO NEED TO IMPLEMENT DELETION OF COMMENTS IN THIS ARTICLE ALSO
 @app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
@@ -303,16 +300,22 @@ def delete_article(id):
     # represents an object in the articles table
     article = c.fetchone()
 
+
     # compared currented logged in user to article author to check if you can delete
     current_author = article['author']
+    # used so you can delete comments with article id only
+    delete_title = article['title']
+
     if session['username'] == current_author:
         pass
     else:
         flash('Cannot delete must be appropriate author', 'danger')
         return redirect(url_for('dashboard'))
-    # ends here
 
-    # Execute second delete query
+    # Execute delete query of article comments
+    c.execute("DELETE FROM comments WHERE article_title=%s AND common_id=%s", [delete_title, id])
+
+    # Execute delete query of article
     c.execute("DELETE FROM articles WHERE id=%s", [id])
 
     # Commit to DB
