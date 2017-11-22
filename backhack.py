@@ -83,7 +83,7 @@ def discussion_page(id):
 
         # Execute query
         c.execute("INSERT INTO comments(article_title, comment, author, common_id) VALUES(%s, %s, %s, %s)",
-                  (current_title, new_comment, session['username'], current_id))
+                  (current_title, new_comment, session['username'], id))
 
         # Commit to DB
         conn.commit()
