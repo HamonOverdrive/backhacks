@@ -66,11 +66,9 @@ def discussion_page(id):
 
     # article title is need so you can put inside comment table
     current_title = article['title']
-    # article id will be the unique id of the article just in case if articles have same name also to be queried if post
-    current_id = article['id']
 
     # Fetch all comments for html page
-    c.execute("SELECT * FROM comments WHERE article_title=%s AND common_id=%s", [current_title, current_id])
+    c.execute("SELECT * FROM comments WHERE article_title=%s AND common_id=%s", [current_title, id])
 
     # fetch all into variable for later use
     comments = c.fetchall()
