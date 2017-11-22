@@ -327,5 +327,51 @@ def delete_article(id):
 
     return redirect(url_for('dashboard'))
 
+# id is the id of the comment not article for this route
+@app.route('/edit_comment/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_comment(id):
+    # Create Cursor
+    c, conn = connection()
+
+    # Get comment by id
+    c.execute("SELECT * FROM comments WHERE id = %s", [id])
+
+    # represents all rows of 1 comment of given id
+    comment = c.fetchone()
+
+    # Get form
+    form = CommentsForm(request.form)
+
+    # Populate comment form fields
+    form.comment.data = comment['comment']
+
+    comment_author = comment['author']
+    # Before Post check if author of comment is the one editing
+    if session['username'] == comment_author:
+        pass
+    else:
+        flash('Cannot edit must be appropriate author', 'danger')
+        return redirect(url_for('discussion_page'))
+
+    if request.method == 'POST' and form.validate():
+        new_comment = request.form['comment']
+
+        # Execute
+        c.execute("UPDATE comments SET comment=%s WHERE id = %s", (new_comment, id))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        c.close()
+        conn.close()
+
+        flash('Comment Updated', 'success')
+
+        return redirect(url_for('discussion_page'))
+
+    return render_template('edit_comment.html', form=form)
+
 if __name__ == '__main__':
     app.run()

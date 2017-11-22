@@ -2,27 +2,13 @@
 
 {% block body %}
     <div class="container">
-        <h1>{{ article.title }}</h1>
-        <small>Written by {{ article.author }} on {{ article.create_date }}</small>
-        <hr>
-        <div>
-        {{ article.body | safe}}
-        </div>
-    </div>
-
-    <br>
-{#    add comment history and box#}
-    <div class="container">
         {% include 'includes/comment_box.html' %}
-
+        <h1>Edit Comment:</h1>
         <ul class="list-group">
             {% for comment in comments %}
                 <li class="list-group-item">{{ comment.comment }} posted by <strong>{{ comment.author }}</strong> on <strong>{{ comment.comment_date }}</strong>
-                <a href="/edit_comment/{{ comment.id }}" class="btn btn-default pull-right">Edit</a>
                 </li>
             {% endfor %}
         </ul>
     </div>
-
-
 {% endblock %}
