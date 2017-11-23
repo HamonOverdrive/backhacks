@@ -73,6 +73,7 @@ def discussion_page(id):
     # fetch all into variable for later use
     comments = c.fetchall()
 
+    # if post means comment is being added
     if request.method == 'POST' and form.validate():
         # get form body data as this is post method and create cursor dont need if post as this is post already at the top
         # THIS IS RETURNING AN EMPTY STRING WHY~~~~ answer: compare login html input and discussion html render field
@@ -93,7 +94,7 @@ def discussion_page(id):
         conn.close()
 
         flash('Comment added!', 'success')
-        return redirect(url_for('discussions_page'))
+        return redirect(url_for('discussion_page', id=id))
 
     return render_template('discussion.html', article=article, form=form, comments=comments)
 
@@ -328,7 +329,7 @@ def delete_article(id):
     return redirect(url_for('dashboard'))
 
 # id is the id of the comment not article for this route
-# PROBLEM: THE Article.id in the inlcudes comment box making it not WORK~~ should i make a second commetbox?
+# PROBLEM: THE Article.id in the inlcudes comment box making it not WORK~~ for now I made a second commentbox
 @app.route('/edit_comment/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_comment(id):
