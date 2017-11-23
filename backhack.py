@@ -349,12 +349,13 @@ def edit_comment(id):
 
     # Before Post check if author of comment is the one editing
     comment_author = comment['author']
+    # this variable is made so the redirect can be directed to correct article id
     comment_common_id = comment['common_id']
     if session['username'] == comment_author:
         pass
     else:
         flash('Cannot edit must be appropriate author', 'danger')
-        return redirect(url_for('discussion_page'))
+        return redirect(url_for('discussion_page', id=comment_common_id))
 
     if request.method == 'POST' and form.validate():
         new_comment = request.form['comment']
