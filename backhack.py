@@ -197,7 +197,7 @@ def dashboard():
     c, conn = connection()
 
     # Get articles
-    c.execute("SELECT * FROM articles")
+    result = c.execute("SELECT * FROM articles")
 
     articles = c.fetchall()
     if result > 0:
