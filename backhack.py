@@ -349,6 +349,7 @@ def edit_comment(id):
 
     # Before Post check if author of comment is the one editing
     comment_author = comment['author']
+    comment_common_id = comment['common_id']
     if session['username'] == comment_author:
         pass
     else:
@@ -370,7 +371,7 @@ def edit_comment(id):
 
         flash('Comment Updated', 'success')
 
-        return redirect(url_for('discussion_page', id=comment.common.id))
+        return redirect(url_for('discussion_page', id=comment_common_id))
 
     return render_template('edit_comment.html', form=form, comment=comment)
 
