@@ -388,13 +388,17 @@ def delete_comment(id):
     # represents all rows of 1 comment of given id
     comment = c.fetchone()
 
+    # need to get article id to use for redirect of url for as comment id will not work
+    # Remember the common id can give us access to the articles table
+    article_id = comment['common_id']
     # Before Post check if author of comment is the one deleting
     comment_author = comment['author']
     if session['username'] == comment_author:
         pass
     else:
         flash('Cannot delete must be appropriate author', 'danger')
-        return redirect(url_for('discussion_page', id=id))
+        # cant use the comment post id as its different from article id
+        return redirect(url_for('discussion_page', id=article_id))
 
     # Execute delete query of single comment
     c.execute("DELETE FROM comments WHERE id=%s", [id])
@@ -407,8 +411,8 @@ def delete_comment(id):
     conn.close()
 
     flash('Comment deleted', 'success')
-
-    return redirect(url_for('discussion_page', id=id))
+    # cant use the comment post id as its different from article id
+    return redirect(url_for('discussion_page', id=article_id))
 
 
 if __name__ == '__main__':
