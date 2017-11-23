@@ -51,7 +51,7 @@ def discussions_page():
     c.close()
     conn.close()
 
-# Single discussion page
+# Single discussion page AND implementation of add comments here also
 @app.route('/discussion/<string:id>/', methods=['GET', 'POST'])
 def discussion_page(id):
     #POSSIBLE BUG HERE
@@ -310,7 +310,7 @@ def delete_article(id):
         flash('Cannot delete must be appropriate author', 'danger')
         return redirect(url_for('dashboard'))
 
-    # Execute delete query of article comments
+    # Execute delete query of all article comments
     c.execute("DELETE FROM comments WHERE article_title=%s AND common_id=%s", [delete_title, id])
 
     # Execute delete query of article
@@ -375,6 +375,41 @@ def edit_comment(id):
         return redirect(url_for('discussion_page', id=comment_common_id))
 
     return render_template('edit_comment.html', form=form, comment=comment)
+
+@app.route('/delete_comment/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_comment(id):
+    # Create Cursor for article
+    c, conn = connection()
+
+    # Get comment by id
+    c.execute("SELECT * FROM comments WHERE id = %s", [id])
+
+    # represents all rows of 1 comment of given id
+    comment = c.fetchone()
+
+    # Before Post check if author of comment is the one deleting
+    comment_author = comment['author']
+    if session['username'] == comment_author:
+        pass
+    else:
+        flash('Cannot delete must be appropriate author', 'danger')
+        return redirect(url_for('discussion_page', id=id))
+
+    # Execute delete query of single comment
+    c.execute("DELETE FROM comments WHERE id=%s", [id])
+
+    # Commit to DB
+    conn.commit()
+
+    # Close connection
+    c.close()
+    conn.close()
+
+    flash('Comment deleted', 'success')
+
+    return redirect(url_for('dashboard', id=id))
+
 
 if __name__ == '__main__':
     app.run()
