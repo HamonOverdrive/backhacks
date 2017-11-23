@@ -2,13 +2,7 @@
 
 {% block body %}
     <div class="container">
-        {% include 'includes/comment_box_edit.html' %}
         <h1>Edit Comment:</h1>
-        <ul class="list-group">
-            {% for comment in comments %}
-                <li class="list-group-item">{{ comment.comment }} posted by <strong>{{ comment.author }}</strong> on <strong>{{ comment.comment_date }}</strong>
-                </li>
-            {% endfor %}
-        </ul>
+        {% include 'includes/comment_box_edit.html' %}
     </div>
 {% endblock %}
