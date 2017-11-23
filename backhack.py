@@ -408,7 +408,7 @@ def delete_comment(id):
 
     flash('Comment deleted', 'success')
 
-    return redirect(url_for('dashboard', id=id))
+    return redirect(url_for('discussion_page', id=id))
 
 
 if __name__ == '__main__':
