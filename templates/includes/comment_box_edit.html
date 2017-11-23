@@ -1,0 +1,20 @@
+{% block body %}
+
+{#    This second comment box need so the id corresponds to the comment id not the article id#}
+{#	{% if session['logged_in']%}#}
+        {% from "includes/_formhelpers.html" import render_field %}
+		<form action="{{ url_for('discussion_page', id=comment.id) }}" class="form" method="post" id="replyform">
+            {{form.hidden_tag()}}
+            <div class="form-group">
+                {{ render_field(form.comment, class_="form-control") }}
+            </div>
+			<br>
+			<input class="btn btn-primary" type="submit" value="submit">
+			<br>
+			<br>
+		</form>
+{#	{% else %}#}
+{#	<p>You must be <a href="/login/">logged in</a> to post!</p>#}
+{#	{% endif %}#}
+
+{% endblock %}

@@ -197,7 +197,7 @@ def dashboard():
     c, conn = connection()
 
     # Get articles
-    result = c.execute("SELECT * FROM articles")
+    c.execute("SELECT * FROM articles")
 
     articles = c.fetchall()
     if result > 0:
@@ -328,6 +328,7 @@ def delete_article(id):
     return redirect(url_for('dashboard'))
 
 # id is the id of the comment not article for this route
+# PROBLEM: THE Article.id in the inlcudes comment box making it not WORK~~ should i make a second commetbox?
 @app.route('/edit_comment/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_comment(id):
@@ -346,8 +347,8 @@ def edit_comment(id):
     # Populate comment form fields
     form.comment.data = comment['comment']
 
-    comment_author = comment['author']
     # Before Post check if author of comment is the one editing
+    comment_author = comment['author']
     if session['username'] == comment_author:
         pass
     else:
@@ -371,7 +372,7 @@ def edit_comment(id):
 
         return redirect(url_for('discussion_page'))
 
-    return render_template('edit_comment.html', form=form)
+    return render_template('edit_comment.html', form=form, comment=comment)
 
 if __name__ == '__main__':
     app.run()
