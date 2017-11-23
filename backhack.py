@@ -370,7 +370,7 @@ def edit_comment(id):
 
         flash('Comment Updated', 'success')
 
-        return redirect(url_for('discussion_page'))
+        return redirect(url_for('discussion_page', id=comment.common.id))
 
     return render_template('edit_comment.html', form=form, comment=comment)
 
