@@ -20,9 +20,9 @@
                 <li class="list-group-item">{{ comment.comment }} posted by <strong>{{ comment.author }}</strong> on <strong>{{ comment.comment_date }}</strong>
                     <br>
                 <a href="/edit_comment/{{ comment.id }}" class="btn btn-default">Edit</a>
-                <form action="{{ url_for('delete_comment', id=comment.id) }}" method="post">
+                <form action="{{ url_for('delete_comment', id=comment.id) }}" method="post" class="form-inline">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <input type="submit" value="Delete" class="btn btn-danger d">
                 </form>
                 </li>
             {% endfor %}
