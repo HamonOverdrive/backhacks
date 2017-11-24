@@ -21,7 +21,7 @@
                 <a href="/edit_comment/{{ comment.id }}" class="btn btn-default pull-right">Edit</a>
                 <form action="{{ url_for('delete_comment', id=comment.id) }}" method="post">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <input type="submit" value="Delete" class="btn btn-danger pull-right">
                 </form>
                 </li>
             {% endfor %}
