@@ -477,14 +477,14 @@ def ipn():
 def purchase():
 	try:
 		return render_template("subscribe.html")
-	except Exception, e:
+	except Exception as e:
 		return(str(e))
 
 @app.route('/success/')
 def success():
 	try:
 		return render_template("success.html")
-	except Exception, e:
+	except Exception as e:
 		return(str(e))
 
 
