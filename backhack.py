@@ -12,6 +12,7 @@ from werkzeug.datastructures import ImmutableOrderedMultiDict
 import requests
 from MySQLdb import escape_string as thwart
 import gc
+import time
 
 app = Flask(__name__)
 
@@ -442,7 +443,7 @@ def ipn():
 				payment_gross = thwart(request.form.get('payment_gross'))
 				payment_fee = request.form.get('payment_fee')
 				payment_net = float(payment_gross) - float(payment_fee)
-				payment_status = thwart(request.form.get('payment_status'))
+				payment_status = request.form.get('payment_status')
 				txn_id = thwart(request.form.get('txn_id'))
 			except Exception as e:
 				with open('/tmp/ipnout.txt', 'a') as f:
