@@ -447,8 +447,8 @@ def ipn():
                 txn_id = thwart(request.form.get('txn_id'))
             except Exception as e:
                 with open('/tmp/ipnout.txt', 'a') as f:
-                    # data = 'ERROR WITH IPN DATA\n' + str(values) + '\n'
 					data = 'ERROR WITH IPN DATA\n' + str(values) + '\n' + str(e) + '\n'
+                    # data = 'ERROR WITH IPN DATA\n' + str(values) + '\n'
                     f.write(data)
 
             with open('/tmp/ipnout.txt', 'a') as f:
