@@ -441,7 +441,7 @@ def ipn():
                 username = thwart(request.form.get('custom'))
                 last_name = thwart(request.form.get('last_name'))
                 payment_gross = thwart(request.form.get('payment_gross'))
-                payment_fee = thwart(request.form.get('payment_fee'))
+                payment_fee = request.form.get('payment_fee')
                 payment_net = float(payment_gross) - float(payment_fee)
                 payment_status = thwart(request.form.get('payment_status'))
                 txn_id = thwart(request.form.get('txn_id'))
