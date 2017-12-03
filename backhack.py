@@ -428,7 +428,7 @@ def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
 	title = {"text": 'My Title'}
 	xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
 	yAxis = {"title": {"text": 'yAxis Label'}}
-	return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
+	return render_template('main.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
 
 
 if __name__ == '__main__':
