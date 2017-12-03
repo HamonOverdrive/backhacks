@@ -69,13 +69,30 @@
 <div class="container">
 
 </div>
-
 {#main content html ends here#}
+
+
+{#chart practice code here#}
+<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 500px"></div>
+<script>
+	var chart_id = {{ chartID|safe }}
+	var series = {{ series|safe }}
+	var title = {{ title|safe }}
+	var xAxis = {{ xAxis|safe }}
+	var yAxis = {{ yAxis|safe }}
+	var chart = {{ chart|safe }}
+</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js "></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="../static/graph.js"></script>
+
+{#Chart code ends here#}
+
+
 
 <footer class="footer">
     <p>Back Hacks, Copyright &copy; 2017</p>
 </footer>
-
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
