@@ -73,11 +73,6 @@
 {#main content html ends here#}
 
 
-<footer class="footer">
-    <p>Back Hacks, Copyright &copy; 2017</p>
-</footer>
-
-
 <script>
 	var chart_id = {{ chartID|safe }}
 	var series = {{ series|safe }}
@@ -92,6 +87,10 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="../static/graph.js"></script>
 {#Chart code ends here#}
+
+<footer class="footer">
+    <p>Back Hacks, Copyright &copy; 2017</p>
+</footer>
 
 {#<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>#}
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
